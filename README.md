@@ -39,11 +39,11 @@
 
 #### Name
 
-- the parameters that we multiply are called weights-$w$
+- the parameters that we multiply are called weights - $w$
 
 - the parameters that we add are called biases
 
-  <img src="README/image-20240522152509931.png" alt="image-20240522152509931" style="zoom:25%;" />
+<img src="README/image-20240522152509931.png" alt="image-20240522152509931" style="zoom:25%;" />
 
 ### The Chain Rule
 
@@ -51,9 +51,7 @@ e.g. use weight measurements to predict height and to predict shoe size
 
 #### essence of the chain rule
 
-$$
-\frac{dSize}{dWeight}=\frac{dSize}{dHeight}\times\frac{dHeight}{dWeight}
-$$
+$$\frac{dSize}{dWeight}=\frac{dSize}{dHeight}\times\frac{dHeight}{dWeight}$$
 
 - the chain rule applies to the residual sum of squares(残差平方和).
 
@@ -65,9 +63,7 @@ $$
 
   - First: find the relation between intercept and sum of squared residuals.(use sum of squared residuals)
 
-  $$
-  \frac{d}{d\space intercept} loss = \sum\limits_{i=1}^{k} \frac{d}{d\space intercept}(observed\space height_i-(intercept+slope_i\times weight_i))
-  $$
+  $$\frac{d}{d\space intercept} loss = \sum\limits_{i=1}^{k} \frac{d}{d\space intercept}(observed\space height_i-(intercept+slope_i\times weight_i))  $$
 
   - Second: update step size to close 0
     - gradient descent determines the **step size** by multiplying the **slope** by a small number called the **learning rate**.
