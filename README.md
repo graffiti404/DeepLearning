@@ -51,7 +51,9 @@ e.g. use weight measurements to predict height and to predict shoe size
 
 #### essence of the chain rule
 
-$$\frac{dSize}{dWeight}=\frac{dSize}{dHeight}\times\frac{dHeight}{dWeight}$$
+$$
+\frac{dSize}{dWeight}=\frac{dSize}{dHeight}\times\frac{dHeight}{dWeight}
+$$
 
 - the chain rule applies to the residual sum of squares(残差平方和).
 
@@ -63,7 +65,9 @@ $$\frac{dSize}{dWeight}=\frac{dSize}{dHeight}\times\frac{dHeight}{dWeight}$$
 
   - First: find the relation between intercept and sum of squared residuals.(use sum of squared residuals)
 
-  $$\frac{d}{d\space intercept} loss = \sum\limits_{i=1}^{k} \frac{d}{d\space intercept}(observed\space height_i-(intercept+slope_i\times weight_i))  $$
+  $$
+  \frac{d}{d\space intercept} loss = \sum\limits_{i=1}^{k} \frac{d}{d\space intercept}(observed\space height_i-(intercept+slope_i\times weight_i))
+  $$
 
   - Second: update step size to close 0
     - gradient descent determines the **step size** by multiplying the **slope** by a small number called the **learning rate**.
@@ -73,9 +77,36 @@ $$\frac{dSize}{dWeight}=\frac{dSize}{dHeight}\times\frac{dHeight}{dWeight}$$
 
   this operation also can be used to find the optimal value of slope.
 
-- to save time facing lots of points, there is a thing called **stochastic gradient decent**(随机梯度下降), that uses a **randomly selected subset** of the data at **every step**.
+- to save time facing lots of points, there is a thing called **stochastic gradient decent**(随机梯度下降),that uses a **randomly selected subset** of the data at **every step**.
 
 
 
 ## Neural Network Part 2: Backpropagation Main Ideas
 
+### Using the Chain Rule to calculate derivatives
+
+<img src="README/image-20240525111534394.png" alt="image-20240525111534394" style="zoom:22%;" />
+
+- assume only the value of final bias isn't sure, create the relation function and calculate the derivative.
+
+  - $$
+    SSR=\sum \limits_{i=1}^{n=k} (Observed_i-Predicted_i)^2
+    $$
+
+- using chain rule to derive SSR with respect to Predicted.
+
+  - $$
+    \frac{d\space SSR}{d\space b_3}=\sum \limits_{i=1}^{n=3}-2\times (Observed_i-Predicted_i)\times 1
+    $$
+
+- using gradient descent and value of derivative determine step size, find the optimal value. 
+
+### Backpropagation Details Part 1
+
+- **How the chain rule and gradient descent apply to multiple parameters**
+
+------
+
+- **some expression :**
+  - 1 in $x_{1,i}$​​ refers to the activation function(1 th activation function) in the top node
+  - $i$ in $x_{1,i}$ shows us that it corresponds to $input_i$
