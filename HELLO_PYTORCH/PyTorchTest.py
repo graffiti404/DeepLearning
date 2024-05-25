@@ -30,7 +30,7 @@ class BasicNN(nn.Module):  # inherit from a PyTorch class called module
         self.b10 = nn.Parameter(torch.tensor(0.0), requires_grad=False)
         self.w11 = nn.Parameter(torch.tensor(2.7), requires_grad=False)
 
-        self.final_bias = nn.Parameter(torch.tensor(-16.), requires_grad=False)
+        self.final_bias = nn.Parameter(torch.tensor(-16.), requires_grad=True)
 
     def forward(self, input):  # connect input, layer and output; making a forward pass through
         # connect top input and ReLU
@@ -58,9 +58,60 @@ output_values = model(input_doses)
 sns.set_style("white")
 
 sns.lineplot(x=input_doses,
-             y=output_values,
+             y=output_values.detach(),  # use detach to do with gradient
              color='green',
              linewidth=2.5)
 
 plt.ylabel('Effectiveness')
 plt.xlabel('Dose')
+plt.show()
+
+# create training data to optimize b_final
+
+inputs = torch.tensor([0., 0.5, 1.])
+labels = torch.tensor([0., 1., 0.])
+
+optimizer = SGD(model.parameters(), lr=0.1)  # will optimize every parameter that we set requires_grad equal True
+
+print("Final bias, before optimization: " + str(model.final_bias.data) + "\n")
+
+# for loop that does gradient descent
+# each time our optimization code sees all the training data is called an epoch
+for epoch in range(100):
+    total_loss = 0
+    for iteration in range(len(inputs)):
+        input_i = inputs[iteration]
+        label_i = labels[iteration]
+
+        output_i = model(input_i)
+
+        loss = (output_i - label_i) ** 2
+
+        loss.backward()
+        # calculate the derivative of the loss function with respect to the parameter
+
+        total_loss += float(loss)
+
+    if total_loss < 0.0001:  # judge total_loss is enough small
+        print("Num steps: " + str(epoch))
+        break
+
+    optimizer.step()
+    optimizer.zero_grad()  # renew the derivatives
+
+    print("Step: " + str(epoch) + "Final Bias: " + str(model.final_bias.data) + "\n")
+
+print("Final bias, after optimization: " + str(model.final_bias.data))
+
+output_values = model(input_doses)
+
+sns.set_style("white")
+
+sns.lineplot(x=input_doses,
+             y=output_values.detach(),  # use detach to do with gradient
+             color='green',
+             linewidth=2.5)
+
+plt.ylabel('Effectiveness')
+plt.xlabel('Dose')
+plt.show()
